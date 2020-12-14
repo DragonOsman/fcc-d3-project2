@@ -5,7 +5,8 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended"
+        "plugin:@typescript-eslint/eslint-recommended",
+        "standard"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -13,7 +14,7 @@
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 2018
+        "ecmaVersion": 2020
     },
     "plugins": [
         "@typescript-eslint"
@@ -21,7 +22,7 @@
     "rules": {
         "indent": [
             "error",
-            4
+            2
         ],
         "linebreak-style": [
             "error",
@@ -34,6 +35,11 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "prefer-const": "error",
+        "yoda": "error",
+        "space-before-function-paren": "off",
+        "no-var":"error",
+        "no-undef": "warn",
     }
 }
