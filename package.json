@@ -1,0 +1,37 @@
+{
+  "name": "fcc-d3-project2",
+  "version": "1.0.0",
+  "description": "My solution for the Free Code Camp Data Visualization Projects - Visualize Data with a Scatterplot Graph project challenge",
+  "main": "scripts/script.js",
+  "scripts": {
+    "sass": "sass --watch scss/style.scss styles/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DragonOsman/fcc-d3-project2.git"
+  },
+  "keywords": [
+    "d3",
+    "javascript",
+    "typescript",
+    "scss",
+    "html5",
+    "freecodecamp-project"
+  ],
+  "author": "Osman Zakir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DragonOsman/fcc-d3-project2/issues"
+  },
+  "homepage": "https://github.com/DragonOsman/fcc-d3-project2#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^10.1.0",
+    "core-js": "^3.8.1",
+    "eslint": "^7.15.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1"
+  }
+}
