@@ -40,6 +40,6 @@
         "yoda": "error",
         "space-before-function-paren": "off",
         "no-var":"error",
-        "no-undef": "warn",
+        "no-undef": "warn"
     }
 }
