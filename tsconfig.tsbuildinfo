@@ -192,7 +192,7 @@
         "affectsGlobalScope": true
       },
       "./scripts/script.ts": {
-        "version": "c20a748faa2cbe79fd39bb293ef1222fa77f5eb800350bb1548c466c49571220",
+        "version": "4fa5edb8ec150b5cdb984e6e49f8cc1f80d7a30fdfb852666b4e047bdb8fecfb",
         "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "affectsGlobalScope": true
       },
@@ -347,7 +347,7 @@
           },
           {
             "file": "./scripts/script.ts",
-            "start": 1417,
+            "start": 1707,
             "length": 2,
             "messageText": "Cannot find name 'd3'.",
             "category": 1,

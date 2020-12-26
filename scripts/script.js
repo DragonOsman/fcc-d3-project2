@@ -30,6 +30,14 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
     const timeFormat = d3.timeFormat("%M:%S");
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
     const yAxis = d3.axisLeft(yScale).tickFormat(timeFormat);
+    container.append("g")
+        .attr("transform", `translate(0, ${svgHeight - padding})`)
+        .attr("id", "x-axis")
+        .call(xAxis);
+    container.append("g")
+        .attr("transform", `translate(${padding}, 0)`)
+        .attr("id", "y-axis")
+        .call(yAxis);
     const tooltip = d3.select("#tooltip")
         .append("div")
         .attr("id", "tooltip")
@@ -47,13 +55,5 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
         .attr("cx", d => xScale(d.Year) + padding)
         .attr("cy", d => yScale(d.Time))
         .attr("r", radius);
-    container.append("g")
-        .attr("transform", `translate(0, ${svgHeight - padding})`)
-        .attr("id", "x-axis")
-        .call(xAxis);
-    container.append("g")
-        .attr("transform", `translate(${padding}, 0)`)
-        .attr("id", "y-axis")
-        .call(yAxis);
 })
     .catch(error => console.log(error));
