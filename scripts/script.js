@@ -6,7 +6,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
     .then(data => {
     const radius = 5;
     const svgWidth = 900;
-    const svgHeight = 700;
+    const svgHeight = 500;
     const padding = 38;
     const container = d3.select("#scatter-plot-container")
         .append("svg")
@@ -14,13 +14,19 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
         .attr("height", svgHeight)
         .attr("x", 0)
         .attr("y", 0);
-    const xYears = data.map(elem => new Date(elem["Year"]).getFullYear());
-    const xScale = d3.scaleLinear()
+    const xScale = d3.scaleTime()
         .domain([d3.min(data, d => d.Year - 1), d3.max(data, d => d.Year + 1)])
         .range([padding, svgWidth - padding]);
     const yScale = d3.scaleTime()
-        .domain(d3.extent(data, d => d.Time))
-        .range(svgHeight - padding, padding);
+        .domain(d3.extent(data, d => {
+        // initialize Date object with number of seconds
+        // converted to milliseconds
+        const date = new Date(d.Seconds * 1000);
+        const parsedTime = d.Time.split(":");
+        d.Time = new Date(new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), parsedTime[0], parsedTime[1]));
+        return d.Time;
+    }))
+        .range([svgHeight - padding, padding]);
     const timeFormat = d3.timeFormat("%M:%S");
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
     const yAxis = d3.axisLeft(yScale).tickFormat(timeFormat);
@@ -29,6 +35,18 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
         .attr("id", "tooltip")
         .attr("class", "tooltip")
         .style("opacity", 0);
+    container.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("class", "dot")
+        .attr("data-xvalue", d => d.Year)
+        // initialize Date object with number of seconds
+        // converted to milliseconds
+        .attr("data-yvalue", d => new Date(d.Seconds * 1000))
+        .attr("cx", d => xScale(d.Year) + padding)
+        .attr("cy", d => yScale(d.Time))
+        .attr("r", radius);
     container.append("g")
         .attr("transform", `translate(0, ${svgHeight - padding})`)
         .attr("id", "x-axis")
@@ -37,19 +55,5 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
         .attr("transform", `translate(${padding}, 0)`)
         .attr("id", "y-axis")
         .call(yAxis);
-    container.selectAll("circle")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class", "dot")
-        .attr("data-xvalue", d => new Date(d.Year).getFullYear() + 30)
-        .attr("data-yvalue", d => {
-        const time = Date.parse(d.Time);
-        console.log(new Date(time));
-        return new Date(time);
-    })
-        .attr("cx", (d, i) => xScale(xYears[i]))
-        .attr("cy", d => yScale(d.Time))
-        .attr("r", radius);
 })
     .catch(error => console.log(error));

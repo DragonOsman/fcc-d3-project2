@@ -8,7 +8,7 @@ d3.json<Array<JSON>>(
   .then(data => {
     const radius:number = 5;
     const svgWidth:number = 900;
-    const svgHeight:number = 700;
+    const svgHeight:number = 500;
     const padding:number = 38;
     const container = d3.select("#scatter-plot-container")
       .append("svg")
@@ -18,15 +18,21 @@ d3.json<Array<JSON>>(
       .attr("y", 0)
     ;
 
-    const xYears:number[] = data.map(elem => new Date(elem["Year"]).getFullYear());
-
-    const xScale = d3.scaleLinear()
+    const xScale = d3.scaleTime()
       .domain([d3.min(data, d => d.Year - 1), d3.max(data, d => d.Year + 1)])
       .range([padding, svgWidth - padding])
     ;
     const yScale = d3.scaleTime()
-      .domain(d3.extent(data, d => d.Time))
-      .range(svgHeight - padding, padding)
+      .domain(d3.extent(data, d => {
+        // initialize Date object with number of seconds
+        // converted to milliseconds
+        const date:Date = new Date(d.Seconds * 1000);
+        const parsedTime:number[] = d.Time.split(":");
+        d.Time = new Date(new Date(date.getFullYear(), date.getMonth(), date.getDate(),
+          date.getHours(), parsedTime[0], parsedTime[1]));
+        return d.Time;
+      }))
+      .range([svgHeight - padding, padding])
     ;
 
     const timeFormat = d3.timeFormat("%M:%S");
@@ -41,6 +47,20 @@ d3.json<Array<JSON>>(
       .style("opacity", 0)
     ;
 
+    container.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", "dot")
+      .attr("data-xvalue", d => d.Year)
+                                // initialize Date object with number of seconds
+                                // converted to milliseconds
+      .attr("data-yvalue", d => new Date(d.Seconds * 1000))
+      .attr("cx", d => xScale(d.Year) + padding)
+      .attr("cy", d => yScale(d.Time))
+      .attr("r", radius)
+    ;
+
     container.append("g")
       .attr("transform", `translate(0, ${svgHeight - padding})`)
       .attr("id", "x-axis")
@@ -51,22 +71,6 @@ d3.json<Array<JSON>>(
       .attr("transform", `translate(${padding}, 0)`)
       .attr("id", "y-axis")
       .call(yAxis)
-    ;
-
-    container.selectAll("circle")
-      .data(data)
-      .enter()
-      .append("circle")
-      .attr("class", "dot")
-      .attr("data-xvalue", d => new Date(d.Year).getFullYear() + 30)
-      .attr("data-yvalue", d => {
-        const time:number = Date.parse(d.Time);
-        console.log(new Date(time));
-        return new Date(time);
-      })
-      .attr("cx", (d, i) => xScale(xYears[i]))
-      .attr("cy", d => yScale(d.Time))
-      .attr("r", radius)
     ;
   })
   .catch(error => console.log(error))
