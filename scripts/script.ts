@@ -5,8 +5,8 @@ d3.json<Array<JSON>>(
   mode: "cors",
   method: "GET"
 })
-  .then(data => {
-    const radius:number = 5;
+  .then((data: object[]) => {
+    const radius:number = 6;
     const svgWidth:number = 900;
     const svgHeight:number = 500;
     const padding:number = 38;
@@ -36,7 +36,6 @@ d3.json<Array<JSON>>(
     ;
 
     const timeFormat = d3.timeFormat("%M:%S");
-
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
     const yAxis = d3.axisLeft(yScale).tickFormat(timeFormat);
 
@@ -52,12 +51,10 @@ d3.json<Array<JSON>>(
       .call(yAxis)
     ;
 
-    const tooltip = d3.select("#tooltip")
-      .append("div")
-      .attr("id", "tooltip")
-      .attr("class", "tooltip")
-      .style("opacity", 0)
-    ;
+    const tooltip = d3.select("#tooltip");
+    tooltip.style("opacity", 0);
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     container.selectAll("circle")
       .data(data)
@@ -71,7 +68,62 @@ d3.json<Array<JSON>>(
       .attr("cx", d => xScale(d.Year) + padding)
       .attr("cy", d => yScale(d.Time))
       .attr("r", radius)
+      .attr("fill", d => color(d.Doping !== ""))
+      .on("mouseover", (e, d) => {
+        tooltip.attr("data-year", d.Year);
+        tooltip.style("opacity", 0.9);
+
+        tooltip.html(
+          `Name: ${d.Name}
+          <br />Nationality: ${d.Nationality}
+          <br />Year: ${d.Year}
+          <br />Time: ${timeFormat(d.Time)}
+          ${d.Doping ? `<br /><br />${d.Doping}` : ""}`
+        )
+          .style("left", `${e.pageX}px`)
+          .style("top", `${e.pageY - 100}px`)
+          .style("transform", "translateX(50px)")
+        ;
+      })
+      .on("mouseout", () => {
+        tooltip.style("opacity", 0);
+      })
+    ;
+
+    const size:number = 18;
+
+    const legendContainer = container.append("g").attr("id", "legend");
+
+    const legend = legendContainer
+      .selectAll("#legend")
+      .data(color.domain())
+      .enter()
+      .append("g")
+      .attr("transform", (d, i) => `translate(0, ${svgHeight / 2 - i * 20})`)
+    ;
+
+    legend
+      .append("rect")
+      .attr("x", svgWidth - size)
+      .attr("width", size)
+      .attr("height", size)
+      .style("fill", color)
+    ;
+
+    legend
+      .append("text")
+      .attr("x", svgWidth - (size + 6))
+      .attr("y", size / 2)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(d => {
+        if (d) {
+          return "Riders with doping allegations";
+        } else {
+          return "Riders with no doping allegations";
+        }
+      })
     ;
   })
-  .catch(error => console.log(error))
+  .catch((error: ExceptionInformation) => console.log(error))
 ;

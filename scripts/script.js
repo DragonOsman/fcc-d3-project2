@@ -3,8 +3,8 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
     mode: "cors",
     method: "GET"
 })
-    .then(data => {
-    const radius = 5;
+    .then((data) => {
+    const radius = 6;
     const svgWidth = 900;
     const svgHeight = 500;
     const padding = 38;
@@ -38,11 +38,9 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
         .attr("transform", `translate(${padding}, 0)`)
         .attr("id", "y-axis")
         .call(yAxis);
-    const tooltip = d3.select("#tooltip")
-        .append("div")
-        .attr("id", "tooltip")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
+    const tooltip = d3.select("#tooltip");
+    tooltip.style("opacity", 0);
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
     container.selectAll("circle")
         .data(data)
         .enter()
@@ -54,6 +52,50 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
         .attr("data-yvalue", d => new Date(d.Seconds * 1000))
         .attr("cx", d => xScale(d.Year) + padding)
         .attr("cy", d => yScale(d.Time))
-        .attr("r", radius);
+        .attr("r", radius)
+        .attr("fill", d => color(d.Doping !== ""))
+        .on("mouseover", (e, d) => {
+        tooltip.attr("data-year", d.Year);
+        tooltip.style("opacity", 0.9);
+        tooltip.html(`Name: ${d.Name}
+          <br />Nationality: ${d.Nationality}
+          <br />Year: ${d.Year}
+          <br />Time: ${timeFormat(d.Time)}
+          ${d.Doping ? `<br /><br />${d.Doping}` : ""}`)
+            .style("left", `${e.pageX}px`)
+            .style("top", `${e.pageY - 100}px`)
+            .style("transform", "translateX(50px)");
+    })
+        .on("mouseout", () => {
+        tooltip.style("opacity", 0);
+    });
+    const size = 18;
+    const legendContainer = container.append("g").attr("id", "legend");
+    const legend = legendContainer
+        .selectAll("#legend")
+        .data(color.domain())
+        .enter()
+        .append("g")
+        .attr("transform", (d, i) => `translate(0, ${svgHeight / 2 - i * 20})`);
+    legend
+        .append("rect")
+        .attr("x", svgWidth - size)
+        .attr("width", size)
+        .attr("height", size)
+        .style("fill", color);
+    legend
+        .append("text")
+        .attr("x", svgWidth - (size + 6))
+        .attr("y", size / 2)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .text(d => {
+        if (d) {
+            return "Riders with doping allegations";
+        }
+        else {
+            return "Riders with no doping allegations";
+        }
+    });
 })
-    .catch(error => console.log(error));
+    .catch((error) => console.log(error));

@@ -1,6 +1,26 @@
 body {
   color: #000;
+  background-color: #000080;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-align: center;
+  position: relative;
+}
+body .scatter-plot-container {
+  position: absolute;
+  width: 1000px;
+  border-radius: 20px;
+  background-color: #addde6;
+  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 10%);
+}
+body div.tooltip {
+  position: absolute;
+  background-color: #020246;
+  padding: 5px;
+  border-radius: 10px;
+  color: #fff;
 }
 
 /*# sourceMappingURL=style.css.map */
