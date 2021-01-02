@@ -75,15 +75,16 @@ d3.json<Array<JSON>>(
         tooltip.style("opacity", 0.9);
 
         tooltip.html(
-          `Name: ${d.Name}
-          <br />Nationality: ${d.Nationality}
+          `${d.Name}: ${d.Nationality}
           <br />Year: ${d.Year}
           <br />Time: ${timeFormat(d.Time)}
           ${d.Doping ? `<br /><br />${d.Doping}` : ""}`
         )
           .style("left", `${e.pageX - 50}px`)
-          .style("top", `${e.pageY - 20}px`)
+          .style("top", `${e.pageY - 40}px`)
           .style("transform", "translateX(50px)")
+          .style("width", "300px")
+          .style("height", "auto")
         ;
       })
       .on("mouseout", () => {

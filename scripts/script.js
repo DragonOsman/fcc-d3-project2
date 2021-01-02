@@ -58,14 +58,15 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
         .on("mouseover", (e, d) => {
         tooltip.attr("data-year", d.Year);
         tooltip.style("opacity", 0.9);
-        tooltip.html(`Name: ${d.Name}
-          <br />Nationality: ${d.Nationality}
+        tooltip.html(`${d.Name}: ${d.Nationality}
           <br />Year: ${d.Year}
           <br />Time: ${timeFormat(d.Time)}
           ${d.Doping ? `<br /><br />${d.Doping}` : ""}`)
             .style("left", `${e.pageX - 50}px`)
-            .style("top", `${e.pageY - 20}px`)
-            .style("transform", "translateX(50px)");
+            .style("top", `${e.pageY - 40}px`)
+            .style("transform", "translateX(50px)")
+            .style("width", "300px")
+            .style("height", "auto");
     })
         .on("mouseout", () => {
         tooltip.style("opacity", 0);

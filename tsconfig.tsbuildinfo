@@ -192,7 +192,7 @@
         "affectsGlobalScope": true
       },
       "./scripts/script.ts": {
-        "version": "7e4ba264164fe536c0442879bdf02047ddfe5e0b1f37ea6547743e2dfb943065",
+        "version": "2b4bd1f979c466496fa85e92e4ec3f60e90acbc39cd1b6112d40229846797d56",
         "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "affectsGlobalScope": true
       },
