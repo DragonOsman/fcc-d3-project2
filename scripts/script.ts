@@ -54,7 +54,7 @@ d3.json<Array<JSON>>(
     const tooltip = d3.select("#tooltip");
     tooltip.style("opacity", 0);
 
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    const color = d3.scaleOrdinal(d3.schemeCategory10).range(["#b22222", "#5c5cff"]);
 
     container.selectAll("circle")
       .data(data)
@@ -68,7 +68,8 @@ d3.json<Array<JSON>>(
       .attr("cx", d => xScale(d.Year) + padding)
       .attr("cy", d => yScale(d.Time))
       .attr("r", radius)
-      .attr("fill", d => color(d.Doping !== ""))
+      .style("fill", d => color(d.Doping !== ""))
+      .style("stroke", "#fff")
       .on("mouseover", (e, d) => {
         tooltip.attr("data-year", d.Year);
         tooltip.style("opacity", 0.9);
@@ -80,8 +81,8 @@ d3.json<Array<JSON>>(
           <br />Time: ${timeFormat(d.Time)}
           ${d.Doping ? `<br /><br />${d.Doping}` : ""}`
         )
-          .style("left", `${e.pageX}px`)
-          .style("top", `${e.pageY - 100}px`)
+          .style("left", `${e.pageX - 50}px`)
+          .style("top", `${e.pageY - 20}px`)
           .style("transform", "translateX(50px)")
         ;
       })

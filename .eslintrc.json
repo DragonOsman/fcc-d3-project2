@@ -17,7 +17,8 @@
         "ecmaVersion": 2020
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "typescript"
     ],
     "rules": {
         "indent": [
